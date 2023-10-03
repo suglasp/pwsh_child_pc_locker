@@ -5,6 +5,7 @@
 ==========================
 
 **What it does**
+
 Prevents children to game for long hours, utility acts as a safeguard.
 
 When the time has been reached (configured in the json config file), it shows a full screen Winform convering all open screens behind it.
@@ -20,10 +21,12 @@ Parents can click the "Unlock" button, to do a few options after entering the co
 
 
 **Needed Sub-Folder**
+
 .\Logs							->	log files will be written here. The current log files is a .log and the previous one is a .bck
 
 
 **Needed Files**
+
 child_pc_locker.cmd				->	Run child_pc_locker.ps1	in normal mode.
 child_pc_locker.json			->	Configuration file in json format.
 child_pc_locker.ps1				->	The actual utility or script.
@@ -35,6 +38,7 @@ LICENSE							->	Software license
 
 
 **Structure of the 'child_pc_locker.json'**
+
 - Script.Verbose                 : "true" or "" to enable/disable Console output
 - Script.Debug                   : "true" or "false" to enable/disable developer mode (Allows ESC to quit without questions asked!)
 - Locker.ParentalPIN             : enter a PIN code of max 8 numbers
