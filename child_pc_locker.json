@@ -1,0 +1,17 @@
+﻿{
+	"Script" : {
+		"Verbose" : "true",
+		"Debug" : "true"
+	},
+		
+	"Locker" : {
+		"ParentalPIN" : "54321",
+		"NotifyKidsBeforeExpire" : "true"
+	},
+	
+	"KidsSafeGuardAfter" : {
+		"Hours" : "1",
+		"Minutes" : "30",
+		"DeferCount" : "2"
+	}
+}
