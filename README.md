@@ -19,6 +19,8 @@ Parents can click the "Unlock" button, to do a few options after entering the co
 - "Shutdown", force the PC to shutdown. Killing all app's (this function needs Administator rights, otherwise it will be grayed out!)
 - "Disable Guard", this just quits the Child PC Locker utility.
 
+ALT+F4 is intercepted, so the Winform can not be closed by pressing this key combination.
+
 
 **Needed Sub-Folder**
 
@@ -47,3 +49,5 @@ LICENSE							->	Software license
 - KidsSafeGuardAfter.Minutes     : number from 0-60 (minutes)
 - KidsSafeGuardAfter.DeferCount  : number that allows number of defers (+5m extend) a child can request
 
+** Known issues **
+- One can still ALT+TAB and try to close the WinForm (or Powershell cmd window in Debug mode)
