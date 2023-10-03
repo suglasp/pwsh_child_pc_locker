@@ -49,5 +49,5 @@ LICENSE							->	Software license
 - KidsSafeGuardAfter.Minutes     : number from 0-60 (minutes)
 - KidsSafeGuardAfter.DeferCount  : number that allows number of defers (+5m extend) a child can request
 
-** Known issues **
+**Known issues**
 - One can still ALT+TAB and try to close the WinForm (or Powershell cmd window in Debug mode)
