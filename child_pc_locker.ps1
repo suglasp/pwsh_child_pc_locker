@@ -6,7 +6,7 @@
 # The idea was for my kids, to safeguard gaming or play time on a Windows PC.
 #
 # Created : 01/10/2023
-# Changed : 03/10/2023
+# Changed : 04/10/2023
 #
 # Use the child_pc_locker.json to configure the basic settings:
 # Script.Verbose                 : true or false to enable/disable Console output
@@ -920,12 +920,12 @@ Function Main {
 	# Parental Reset Button
 	[System.Windows.Forms.Button]$btnReset = New-Object System.Windows.Forms.Button
 	$btnReset.Visible = $False
-	#$btnReset.Size = "200,42"
-	$btnReset.Width = (($btnDefer.Left + $btnDefer.Width) - $btnUnlock.Left) + ($btnDefer.Width + $btnUnlock.Width) * 2 + 28
+	#$btnReset.Size = "$($btnDefer.Width + $btnUnlock.Width),42"
+	$btnReset.Width = ($btnDefer.Width + $btnUnlock.Width)
 	$btnReset.Height = 42
-	#$btnReset.Location = New-Object System.Drawing.Point(($btnShutdown.Left + $btnShutdown.Width) - $btnReset.Width, $btnUnlock.Top + $btnUnlock.Height + 30)
+	#$btnReset.Location = New-Object System.Drawing.Point((($ScreenSize.Width / 2) - ($btnReset.Width / 2)), $btnUnlock.Top + $btnUnlock.Height + 30)
 	$btnReset.Top = $btnShutdown.Top + $btnShutdown.Height + 30
-	$btnReset.Left = $btnShutdown.Left
+	$btnReset.Left = (($ScreenSize.Width / 2) - ($btnReset.Width / 2))
 	$btnReset.ForeColor = [System.Drawing.Color]::White
 	$btnReset.BackColor = [System.Drawing.Color]::Blue
 	$btnReset.Font = New-Object System.Drawing.Font('Verdana', 10, [System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold))
