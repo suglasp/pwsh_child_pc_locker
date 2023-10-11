@@ -9,7 +9,7 @@
 Prevents children to game for long hours, utility acts as a safeguard.
 
 When the time has been reached (configured in the json config file), it shows a full screen Winform convering all open screens behind it.
-It will showing a text that the time has been reached. And it will also show two blue buttons "Defer (+5m)" and "Unlock".
+It will show a text that the time has been reached. And it will also show two blue buttons "Defer (+5m)" and "Unlock".
 The child can click "Defer (+5m)" to defer the time for +5 minutes for a number of times.
 This is also configurable, so it's not endless they can defer. Default is 2 times they can click the button (for up to 10min total).
 Parents can click the "Unlock" button, to do a few options after entering the correct PIN code:
