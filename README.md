@@ -26,19 +26,19 @@ Before the lock/safeguard screen kicks in, 10 minutes up front, it will show on 
 
 **Needed Sub-Folder**
 
-.\Logs							->	log files will be written here. The current log files is a .log and the previous one is a .bck (latest version will write the log file to  the users folder, unless, not available).
+- .\Logs							->	log files will be written here. The current log files is a .log and the previous one is a .bck (latest version will write the log file to  the users folder, unless, not available).
 
 
 **Needed Files**
 
-child_pc_locker.cmd				->	Run child_pc_locker.ps1	in normal mode.
-child_pc_locker.json			->	Configuration file in json format.
-child_pc_locker.ps1				->	The actual utility or script.
-child_pc_locker_debug.cmd		->	Run child_pc_locker.ps1	in Verbose + Debug mode. In Debug mode, you can press ESC to exit.
-child_pc_locker_install.reg		->	Registry file to install the tool under the current user (copy all files under "C:\Program Files\pclocker\")
-child_pc_locker_uninstall.reg	->	Registry file to uninstall the tool under the current user
-README							->	This file
-LICENSE							->	Software license
+- child_pc_locker.cmd				->	Run child_pc_locker.ps1	in normal mode.
+- child_pc_locker.json			->	Configuration file in json format.
+- child_pc_locker.ps1				->	The actual utility or script.
+- child_pc_locker_debug.cmd		->	Run child_pc_locker.ps1	in Verbose + Debug mode. In Debug mode, you can press ESC to exit.
+- child_pc_locker_install.reg		->	Registry file to install the tool under the current user (copy all files under "C:\Program Files\pclocker\")
+- child_pc_locker_uninstall.reg	->	Registry file to uninstall the tool under the current user
+- README							->	This file
+- LICENSE							->	Software license
 
 
 **Structure of the 'child_pc_locker.json'**
