@@ -57,6 +57,8 @@ public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
 [Bool]$Global:FormShown                 = $False
 [UInt32]$Global:TimesDefer              = 0           # nr of times the child pressed "Defer (+5m)" button
 [String]$Global:UserDocumentsPath       = $([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::MyDocuments))
+[Bool]$Global:NotificationPopupShown    = $False
+
 
 # Script scope general app vars
 [Bool]$Script:AltF4Pressed              = $False
@@ -415,13 +417,16 @@ Function Calc-GameTimeExpired {
 		[UInt32]$minutes = ([UInt32]($Global:Config.KidsSafeGuardAfter.Minutes))
 
 		# 15 min up-front notification that game time will expire soon
-		If ( ($(Get-GameTimeElapsed) -ge 10) -And ($Global:Config.Locker.NotifyKidsBeforeExpire -eq $True) ){
-			[System.Windows.Forms.Form]$gametimeWarnFrm = Show-BusyDlg -Message "  Game time will almost expire!"
-			Start-Sleep -Seconds 10
-			If ($gametimeWarnFrm) {
-			    $gametimeWarnFrm.Close()
-			    $gametimeWarnFrm.Dispose()
-			    $gametimeWarnFrm = $Null
+		If (-Not ($Global:NotificationPopupShown)) {
+			If ( ($(Get-GameTimeElapsed) -ge 10) -And ($Global:Config.Locker.NotifyKidsBeforeExpire -eq $True) ){
+				[System.Windows.Forms.Form]$gametimeWarnFrm = Show-BusyDlg -Message "  Game time will almost expire!"
+				Start-Sleep -Seconds 30
+				If ($gametimeWarnFrm) {
+					$gametimeWarnFrm.Close()
+					$gametimeWarnFrm.Dispose()
+					$gametimeWarnFrm = $Null
+					$Global:NotificationPopupShown = $True
+				}
 			}
 		}
 		
@@ -514,6 +519,7 @@ Function Defer-GameTime {
 Function SuperDefer-GameTime {
 	Defer-GameTime -Minutes 60
 	Lock-PINCode
+	$Global:NotificationPopupShown = $False
 	
 	# we reset the defer count :)
 	$Global:TimesDefer -= (1)
@@ -641,6 +647,7 @@ Function Reset-Guard {
 	
 	# First, reset timer, or it will expire immediately!
 	Reset-GameTime
+	$Global:NotificationPopupShown = $False
 	
 	# reload original config
 	Load-ScriptConfig
