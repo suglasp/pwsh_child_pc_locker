@@ -26,7 +26,7 @@ Before the lock/safeguard screen kicks in, 10 minutes up front, it will show on 
 
 **Needed Sub-Folder**
 
-.\Logs							->	log files will be written here. The current log files is a .log and the previous one is a .bck
+.\Logs							->	log files will be written here. The current log files is a .log and the previous one is a .bck (latest version will write the log file to  the users folder, unless, not available).
 
 
 **Needed Files**
@@ -47,9 +47,12 @@ LICENSE							->	Software license
 - Script.Debug                   : "true" or "false" to enable/disable developer mode (Allows ESC to quit without questions asked!)
 - Locker.ParentalPIN             : enter a PIN code of max 8 numbers
 - Locker.NotifyKidsBeforeExpire  : "true" or "false" to enable/disable child upfront message (10 min before expire of play time)
+- Locker.HideParentalButton      : "true" or "false" to hide/show the "Unlock" button by default (if hidden, press F4 as a parent to make it visible)
 - KidsSafeGuardAfter.Hours       : number from 0-24 (hours)
 - KidsSafeGuardAfter.Minutes     : number from 0-60 (minutes)
 - KidsSafeGuardAfter.DeferCount  : number that allows number of defers (+5m extend) a child can request
+- KidsSafeGuardAfter.UnlockTime  : currently, unused (TBA feature)
+- KidsSafeGuardAfter.LockTime    : currently, unused (TBA feature)
 
 
 **Known issues**
