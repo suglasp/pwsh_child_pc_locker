@@ -23,6 +23,8 @@ ALT+F4 is intercepted, so the Winform can not be closed by pressing this key com
 
 Before the lock/safeguard screen kicks in, 10 minutes up front, it will show on the screen in the right below corner a small Magenta popup.
 
+The default PIN code is 54321, you should change this in the json config file! (In the movie Spaceballs, Skroob says "That's the same code as my luggage!")
+
 
 **Needed Sub-Folder**
 
