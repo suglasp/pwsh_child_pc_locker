@@ -6,20 +6,23 @@
 # The idea was for my kids, to safeguard gaming or play time on a Windows PC.
 #
 # Created : 01/10/2023
-# Changed : 04/10/2023
+# Changed : 11/10/2023
 #
 # Use the child_pc_locker.json to configure the basic settings:
 # Script.Verbose                 : true or false to enable/disable Console output
 # Script.Debug                   : true or false to enable/disable developer mode (Allows ESC to quit without questions asked!)
 # Locker.ParentalPIN             : enter a PIN code of max 8 numbers
 # Locker.NotifyKidsBeforeExpire  : true or false to enable/disable child upfront message (10 min before expire of play time)
+# Locker.HideParentalButton      : true or false to make the "Unlock" button default visible/invisible (Press F4 if the button is not shown)
 # KidsSafeGuardAfter.Hours       : number from 0-24 (hours)
 # KidsSafeGuardAfter.Minutes     : number from 0-60 (minutes)
 # KidsSafeGuardAfter.DeferCount  : number that allows number of defers (+5m extend) a child can request
+# KidsSafeGuardAfter.UnlockTime  : Time when the app unlocks the machine, and starts it's routine
+# KidsSafeGuardAfter.LockTime    : Time when the app locks the machine "permanently" (aka, the kids can not play anymore. No Defer is present).
 #
 # Notes :
 # - The utility/script has been tested with a single screen/monitor
-# - Works with Powershell 7.3
+# - Works with Powershell 7.3 (default the cmd batch files trigger pwsh.exe instead of powershell.exe)
 #
 
 
@@ -53,6 +56,7 @@ public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
 [Bool]$Global:Active                    = $True
 [Bool]$Global:FormShown                 = $False
 [UInt32]$Global:TimesDefer              = 0           # nr of times the child pressed "Defer (+5m)" button
+[String]$Global:UserDocumentsPath       = $([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::MyDocuments))
 
 # Script scope general app vars
 [Bool]$Script:AltF4Pressed              = $False
@@ -115,7 +119,7 @@ Function Load-ScriptConfig {
 
 #
 # Function : Is-Admin
-# Local Admin user?
+# Is the user currently logged on a local Admin user?
 # 
 Function Is-Admin {
     Return ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
@@ -294,6 +298,17 @@ Function Show-Form {
 			Try {
 				Rng-Title
 				
+				# Hide the Parental Unlock button if set by config
+				If ($Global:Config.Locker.HideParentalButton) {
+					$btnUnlock = $Global:Form.Controls | Where-Object {$_.Name -like "btnUnlock"}
+	
+					If ($Null -ne $btnUnlock) {
+						If ($btnUnlock.Visible) {
+							$btnUnlock.Visible = $False
+						}
+					}
+				}
+				
 				$Global:FormShown = $True
 				[void]$FormObject.ShowDialog()
 				#[void]$FormObject.Show()
@@ -362,9 +377,9 @@ Function Exit-App {
 # Generates random RGB Color object
 #
 Function Rng-Color {
-    [Byte]$r = [Byte](Get-Random -Minimum 0 -Maximum 255)
-    [Byte]$g = [Byte](Get-Random -Minimum 0 -Maximum 255)
-    [Byte]$b = [Byte](Get-Random -Minimum 0 -Maximum 255)
+    [Byte]$r = [Byte](Get-Random -Minimum 30 -Maximum 255)
+    [Byte]$g = [Byte](Get-Random -Minimum 30 -Maximum 255)
+    [Byte]$b = [Byte](Get-Random -Minimum 30 -Maximum 255)
 	[System.Drawing.Color]$rngColor = [System.Drawing.Color]::FromArgb($r, $g, $b)
 	Return $rngColor
 }
@@ -400,7 +415,7 @@ Function Calc-GameTimeExpired {
 		[UInt32]$minutes = ([UInt32]($Global:Config.KidsSafeGuardAfter.Minutes))
 
 		# 15 min up-front notification that game time will expire soon
-		If ( ($(Get-GameTimeElapsed) -ge 10) -And ($Global:Config.Locker.NotifyKidsBeforeExpire) ){
+		If ( ($(Get-GameTimeElapsed) -ge 10) -And ($Global:Config.Locker.NotifyKidsBeforeExpire -eq $True) ){
 			[System.Windows.Forms.Form]$gametimeWarnFrm = Show-BusyDlg -Message "  Game time will almost expire!"
 			Start-Sleep -Seconds 10
 			If ($gametimeWarnFrm) {
@@ -506,6 +521,24 @@ Function SuperDefer-GameTime {
 	# Hide form
 	Hide-Form -FormObject $Global:Form
 }
+
+
+#
+# Function : Show-UnlockBtn
+#
+Function Show-UnlockBtn {
+	Write-Log -Msg "Pressed button to make unlock button visible."
+	$btnUnlock = $Global:Form.Controls | Where-Object {$_.Name -like "btnUnlock"}
+	$btnSuperDefer = $Global:Form.Controls | Where-Object {$_.Name -like "btnSuperDefer"}
+
+	If (($Null -ne $btnUnlock) -And ($Null -ne $btnSuperDefer)) {
+		If ((-Not ($btnUnlock.Visible)) -And (-Not ($btnSuperDefer.Visible))) {
+			$btnUnlock.Visible = $True
+			$btnUnlock.Focus()
+		}
+	}
+}
+
 
 #
 # Function : Show-PINCode
@@ -649,6 +682,11 @@ Function Main {
     Param(
         [String[]]$Arguments
     )
+	
+	# Write log file to Users MyDocuments path (if available)
+	If (Test-Path -Path $Global:UserDocumentsPath) {
+		$Global:LogFile	= "$($Global:UserDocumentsPath)\$($Global:ScriptName).log"
+	}
 	
 	# Delete old log file
 	If (Test-Path -Path $Global:LogFile.Replace(".log", ".log.bck")) {
@@ -810,7 +848,12 @@ Function Main {
 	
 	# Unlock Button
 	[System.Windows.Forms.Button]$btnUnlock = New-Object System.Windows.Forms.Button
-	$btnUnlock.Visible = $True
+	If ($Global:Config.Locker.HideParentalButton -eq $True) {
+		$btnUnlock.Visible = $False
+	} Else {
+		$btnUnlock.Visible = $True
+	}
+	
 	#$btnUnlock.Size = "200,42"
 	$btnUnlock.Width = 200
 	$btnUnlock.Height = 42
@@ -946,6 +989,7 @@ Function Main {
 		Switch($_.KeyCode) {
 			# Escape to quit only works in debug mode!
 			"Escape" { If ($Global:DebugMode) {$Global:Form.DialogResult = [System.Windows.Forms.DialogResult]::Cancel; Exit-Form -FormObject $Global:Form; Exit-App } }
+			"F4" { Show-UnlockBtn }
 		}
 		
 		# Intercept ALT+F4 press

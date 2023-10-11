@@ -56,3 +56,14 @@ LICENSE							->	Software license
 
 - One can still ALT+TAB and try to close the WinForm (or Powershell cmd window in Debug mode).
 - Only tested with a single monitor/screen attached.
+
+
+**Updates**
+
+- Added a new configuration feature Locker.HideParentalButton that can hide the Parental "Unlock" button when the play time expires. (Pressing F4 shows the button).
+  This prevents younger kids to try and click on the Unlock button.
+- The title color will now stick to more bright color tones, to make the readability better.
+- Updated the trigger batch files so "Program Files" works (or any other folder with a space in it).
+- Log file now get's written to the user's Documents folder.
+- KidsSafeGuardAfter.UnlockTime and LockTime are pre-defined in the json config file, at this time unused.
+- Script.Debug is now also a property in the json config file and not only a cli parameter.
